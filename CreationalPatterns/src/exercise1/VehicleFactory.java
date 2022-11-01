@@ -22,10 +22,6 @@ public class VehicleFactory {
 
             return null;
         }
-
-        public String getClassName() {
-            return className;
-        }
     }
 
     private static VehicleFactory instance = null;

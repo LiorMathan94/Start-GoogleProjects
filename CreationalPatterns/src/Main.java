@@ -9,7 +9,8 @@ import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
-        testAgency();
+//        testAgency();
+        testBuilder();
     }
 
     private static void testAgency() {
@@ -35,5 +36,6 @@ public class Main {
     private static void testBuilder() {
         LocalDate date = LocalDate.now();
         JobPosition jobPosition = new JobPosition.Builder(date, "Title", true).setDescription("This is the description").build();
+        System.out.println(jobPosition);
     }
 }

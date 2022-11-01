@@ -68,4 +68,17 @@ public class JobPosition {
         this.description = builder.description;
         this.yearsOfExperience = builder.yearsOfExperience;
     }
+
+    @Override
+    public String toString() {
+        return "JobPosition{" +
+                "publishDate=" + publishDate +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", location=" + location +
+                ", salaryCap=" + salaryCap +
+                ", isRemote=" + isRemote +
+                ", yearsOfExperience=" + yearsOfExperience +
+                '}';
+    }
 }

@@ -12,17 +12,17 @@ public class TravelAgency {
     private final Map<Vehicle, Passenger> vehiclesInUse;
 
 
-    public TravelAgency(Map<VehicleFactory.VehicleType, Integer> count) {
+    public TravelAgency(Map<VehicleFactory.VehicleType, Integer> countByType) {
         availableVehicles = new HashMap<>();
         vehiclesInUse = new HashMap<>();
-        generateVehicles(count);
+        generateVehicles(countByType);
     }
 
-    private void generateVehicles(Map<VehicleFactory.VehicleType, Integer> vehiclesToAdd) {
+    private void generateVehicles(Map<VehicleFactory.VehicleType, Integer> countByType) {
         VehicleFactory vehicleFactory = VehicleFactory.getInstance();
 
-        for (VehicleFactory.VehicleType type : vehiclesToAdd.keySet()) {
-            for (int i = 0; i < vehiclesToAdd.get(type); i++) {
+        for (VehicleFactory.VehicleType type : countByType.keySet()) {
+            for (int i = 0; i < countByType.get(type); i++) {
                 Vehicle newVehicle = vehicleFactory.createVehicle(type);
                 this.availableVehicles.computeIfAbsent(type, k -> new ArrayList<>()).add(newVehicle);
             }
@@ -31,30 +31,36 @@ public class TravelAgency {
 
     public void assignVehicle(Passenger passenger) {
         VehicleFactory.VehicleType favoriteType = passenger.getFavoriteVehicleType();
-        Vehicle vehicle = null;
+        Vehicle vehicle = getAvailableVehicle(favoriteType);
 
-        if (this.availableVehicles.containsKey(favoriteType) && this.availableVehicles.get(favoriteType).size() > 0) {
-            vehicle = availableVehicles.get(favoriteType).get(0);
-        } else {
-            List<Vehicle> allVehicles = availableVehicles.values()
-                    .stream().flatMap(List::stream).collect(Collectors.toList());
+        VehicleFactory.VehicleType type = VehicleFactory.VehicleType.fromString(vehicle.getClass().getName());
 
-            if (allVehicles.size() > 0) {
-                vehicle = allVehicles.get(ThreadLocalRandom.current().nextInt(allVehicles.size()));
-            } else {
-                throw new IllegalArgumentException (">>>>>>>>>> No available vehicles!");
-            }
-        }
-
-        if (vehicle != null) {
-            VehicleFactory.VehicleType type = VehicleFactory.VehicleType.fromString(vehicle.getClass().getName());
-            vehiclesInUse.put(vehicle, passenger);
-            availableVehicles.get(type).remove(vehicle);
-        }
+        vehiclesInUse.put(vehicle, passenger);
+        availableVehicles.get(type).remove(vehicle);
 
         if (areAllVehiclesInUse()) {
             invokeWhenAllVehicleInUse();
         }
+    }
+
+    private Vehicle getAvailableVehicle(VehicleFactory.VehicleType favoriteType) {
+        if (isVehicleTypeAvailable(favoriteType)) {
+            return availableVehicles.get(favoriteType).get(0);
+        } else {
+
+            List<Vehicle> allVehicles = availableVehicles.values()
+                    .stream().flatMap(List::stream).collect(Collectors.toList());
+
+            if (allVehicles.size() == 0) {
+                throw new IllegalArgumentException(">>>>>>>>>> No available vehicles!");
+            }
+
+            return allVehicles.get(ThreadLocalRandom.current().nextInt(allVehicles.size()));
+        }
+    }
+
+    private boolean isVehicleTypeAvailable(VehicleFactory.VehicleType type) {
+        return this.availableVehicles.containsKey(type) && this.availableVehicles.get(type).size() > 0;
     }
 
     private boolean areAllVehiclesInUse() {
