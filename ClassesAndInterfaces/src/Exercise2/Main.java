@@ -2,10 +2,11 @@ package Exercise2;
 
 public class Main {
     public static void main(String[] args) {
-        testFarm();
+//        testFarm();
+        testAdapter();
     }
 
-    public static void testFarm() {
+    private static void testFarm() {
         Farm farm = new Farm();
 
         farm.acquire();
@@ -41,5 +42,13 @@ public class Main {
         AbstractAnimal animal5 = farmer.getFarmAnimalById(farm, 5);
         System.out.println(animal5);
         farmer.moveAnimal(animal5);
+    }
+
+    private static void testAdapter() {
+        WoodenHorse woodenHorse = new WoodenHorse();
+        WoodenStructureAdapter woodenStructureAdapter = new WoodenStructureAdapter(woodenHorse);
+
+        Animal animal = woodenStructureAdapter.mate(woodenStructureAdapter);
+        woodenStructureAdapter.move();
     }
 }
