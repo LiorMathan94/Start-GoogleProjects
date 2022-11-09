@@ -8,19 +8,10 @@ import java.util.Optional;
 
 @Service
 public class UserService {
-    private static UserService singleInstance = null;
     @Autowired
     private UserRepository userRepository;
 
     private UserService() {
-    }
-
-    public static UserService getInstance() {
-        if (singleInstance == null) {
-            singleInstance = new UserService();
-        }
-
-        return singleInstance;
     }
 
     public User updateUserName(String email, String name) {

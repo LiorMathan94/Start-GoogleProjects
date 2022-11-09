@@ -14,7 +14,6 @@ import java.util.Optional;
 
 @Repository
 public class UserRepository {
-    private static UserRepository singleInstance = null;
     private final String usersFilepath = "UsersDB";
     private Map<Integer, User> usersMap;
 
@@ -22,14 +21,6 @@ public class UserRepository {
     private UserRepository() throws IOException {
         Files.createDirectories(Paths.get(this.usersFilepath));
         parseConfigToMap();
-    }
-
-    public static UserRepository getInstance() throws IOException {
-        if (singleInstance == null) {
-            singleInstance = new UserRepository();
-        }
-
-        return singleInstance;
     }
 
     public User add(User user) {

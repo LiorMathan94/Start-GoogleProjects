@@ -11,7 +11,6 @@ import java.util.Optional;
 @Service
 public class AuthenticationService {
 
-    private static AuthenticationService singleInstance = null;
     @Autowired
     private UserRepository userRepository;
     private Map<String, String> usersTokens;
@@ -19,14 +18,6 @@ public class AuthenticationService {
 
     public AuthenticationService() {
         usersTokens = new HashMap<>();
-    }
-
-    public static AuthenticationService getInstance() {
-        if (singleInstance == null) {
-            singleInstance = new AuthenticationService();
-        }
-
-        return singleInstance;
     }
 
     public String login(String email, String password) {

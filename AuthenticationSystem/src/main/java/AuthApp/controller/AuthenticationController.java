@@ -9,19 +9,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/auth")
 public class AuthenticationController {
-    private static AuthenticationController singleInstance = null;
     @Autowired
     private AuthenticationService authenticationService;
 
     private AuthenticationController() {
-    }
-
-    public static AuthenticationController getInstance() {
-        if (singleInstance == null) {
-            singleInstance = new AuthenticationController();
-        }
-
-        return singleInstance;
     }
 
     @RequestMapping(value = "register", method = RequestMethod.POST)

@@ -13,21 +13,12 @@ import java.nio.file.AccessDeniedException;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-    private static UserController singleInstance = null;
    @Autowired
     private UserService userService;
    @Autowired
    private AuthenticationService authenticationService;
 
     private UserController() {
-    }
-
-    public static UserController getInstance() {
-        if (singleInstance == null) {
-            singleInstance = new UserController();
-        }
-
-        return singleInstance;
     }
 
     @RequestMapping(value = "name", method = RequestMethod.PATCH)
