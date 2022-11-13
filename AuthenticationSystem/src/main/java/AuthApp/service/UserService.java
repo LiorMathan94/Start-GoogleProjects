@@ -16,44 +16,38 @@ public class UserService {
 
     public User updateUserName(String email, String name) {
         Optional<User> user = userRepository.getByEmail(email);
+        validateUserExists(user);
 
-        if (user.isPresent()) {
-            user.get().setName(name);
-            return userRepository.update(user.get());
-        } else {
-            throw new IllegalArgumentException(String.format("Email address: %s does not exist", email));
-        }
+        user.get().setName(name);
+        return userRepository.update(user.get());
     }
 
     public User updateUserEmail(String email, String newEmail) {
         Optional<User> user = userRepository.getByEmail(email);
+        validateUserExists(user);
 
-        if (user.isPresent()) {
-            user.get().setEmail(newEmail);
-            return userRepository.update(user.get());
-        } else {
-            throw new IllegalArgumentException(String.format("Email address %s does not match any user", email));
-        }
+        user.get().setEmail(newEmail);
+        return userRepository.update(user.get());
     }
 
     public User updateUserPassword(String email, String password) {
         Optional<User> user = userRepository.getByEmail(email);
+        validateUserExists(user);
 
-        if (user.isPresent()) {
-            user.get().setPassword(password);
-            return userRepository.update(user.get());
-        } else {
-            throw new IllegalArgumentException(String.format("Email address %s does not match any user", email));
-        }
+        user.get().setPassword(password);
+        return userRepository.update(user.get());
     }
 
     public void deleteUser(String email) {
         Optional<User> user = userRepository.getByEmail(email);
+        validateUserExists(user);
 
-        if (user.isPresent()) {
-            userRepository.delete(user.get());
-        } else {
-            throw new IllegalArgumentException(String.format("Email address %s does not match any user", email));
+        userRepository.delete(user.get());
+    }
+
+    private void validateUserExists(Optional<User> user) {
+        if (!user.isPresent()) {
+            throw new IllegalArgumentException("User does not exists!");
         }
     }
 }
