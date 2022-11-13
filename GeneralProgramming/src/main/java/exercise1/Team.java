@@ -1,8 +1,12 @@
+package exercise1;
+
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
 
 public class Team {
     private String name;
@@ -32,14 +36,17 @@ public class Team {
         }
     }
 
+    public int getNUM_PLAYERS() {
+        return NUM_PLAYERS;
+    }
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+
     public static Team createTeamWithFormation(String name, Map<Player.Position, Integer> formation) {
         Team team = new Team(name);
-
-        try {
-            team.assignPositions(formation);
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        }
+        team.assignPositions(formation);
 
         return team;
     }
@@ -56,12 +63,9 @@ public class Team {
         }
     }
 
-    public void printToFile(String filename) {
-        try (FileWriter myWriter = new FileWriter(filename)) {
-            myWriter.write(this.toString());
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+    public void printToFile(String filename) throws IOException {
+        FileWriter myWriter = new FileWriter(filename);
+        myWriter.write(this.toString());
     }
 
     @Override
@@ -78,14 +82,13 @@ public class Team {
     }
 
     private int generateUniqueJerseyNumber() {
-        RandomGenerator randomGenerator = new RandomGenerator();
-        List<Integer> ExistingJerseyNumbers = players.stream().map(p -> p.getJerseyNumber()).collect(Collectors.toList());
+        List<Integer> ExistingJerseyNumbers = players.stream()
+                .map(p -> p.getJerseyNumber()).collect(Collectors.toList());
 
-        int randomNumber = randomGenerator.generateRandomNumber(1, 100);
-
-        while (ExistingJerseyNumbers.contains(randomNumber)) {
-            randomNumber = randomGenerator.generateRandomNumber(1, 100);
-        }
+        int randomNumber;
+        do {
+            randomNumber = RandomGenerator.generateRandomNumber(1, 100);
+        } while (ExistingJerseyNumbers.contains(randomNumber));
 
         return randomNumber;
     }
@@ -99,7 +102,7 @@ public class Team {
                     if (entry.getValue() != 1) {
                         return false;
                     }
-                    playersCounter += entry.getValue();
+                    playersCounter += 1;
                     break;
                 }
                 default: {
@@ -115,10 +118,8 @@ public class Team {
     }
 
     private void samplePlayersAndAssignPosition(List<Player> unassignedPlayers, Player.Position position, int count) {
-        RandomGenerator randomGenerator = new RandomGenerator();
-
         for (int i = 0; i < count; i++) {
-            Player randomPlayer = randomGenerator.generateRandomObject(unassignedPlayers);
+            Player randomPlayer = RandomGenerator.generateRandomObject(unassignedPlayers);
             randomPlayer.setPosition(position);
             unassignedPlayers.remove(randomPlayer);
         }

@@ -1,6 +1,8 @@
+package exercise1;
+
 public class Player {
     private String name;
-    private int jerseyNumber;
+    private final int jerseyNumber;
     private int grade;
     private Position position;
 
@@ -8,9 +10,7 @@ public class Player {
     public Player(int jerseyNumber, NameGenerator nameGenerator) {
         this.jerseyNumber = jerseyNumber;
         this.name = nameGenerator.generateRandomName();
-
-        RandomGenerator randomGenerator = new RandomGenerator();
-        this.grade = randomGenerator.generateRandomNumber(0, 100);
+        setGrade(RandomGenerator.generateRandomNumber(0, 100));
     }
 
     public static Player createGoalKeeperPlayer(int jerseyNumber, NameGenerator nameGenerator) {
@@ -51,6 +51,10 @@ public class Player {
     }
 
     public void setGrade(int grade) {
+        if(grade < 0 || grade > 100) {
+            throw new IllegalArgumentException("Grade value must be between 0-100");
+        }
+
         this.grade = grade;
     }
 

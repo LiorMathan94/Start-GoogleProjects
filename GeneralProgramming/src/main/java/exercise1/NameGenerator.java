@@ -1,3 +1,5 @@
+package exercise1;
+
 import java.util.List;
 import java.util.Random;
 

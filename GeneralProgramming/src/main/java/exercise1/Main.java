@@ -1,8 +1,11 @@
+package exercise1;
+
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Map<Player.Position, Integer> formation = new HashMap<>();
         formation.put(Player.Position.GOAL_KEEPER, 1);
         formation.put(Player.Position.DEFENDER, 3);
